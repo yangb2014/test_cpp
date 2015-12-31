@@ -10,10 +10,11 @@ INCLUDES := .
 
 RM := rm -f
 #C,CC或CPP文件的后缀
-PS=cpp
+PS=c
 # GNU Make的隐含变量定义
-CC=g++
-CPPFLAGS = -g -Wall -march=i486
+CC=gcc
+CPPFLAGS = -g -Wall
+CPPFLAGS += -march=native
 CPPFLAGS += $(addprefix -I,$(INCLUDES))
 CPPFLAGS += -MMD
 CPPFLAGS += -rdynamic

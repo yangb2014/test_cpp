@@ -6,8 +6,13 @@
 
 #include <iostream>
 
+#include "stdio.h"
+#include "stdlib.h"
+
 #include <execinfo.h>
 #include <unistd.h>
+
+using namespace std;
 
 
 // ’Ô∂œ
@@ -47,7 +52,7 @@ int print_memuse()
 }
 
 
-//#define DBG_NEW_OP
+#define DBG_NEW_OP
 #ifdef DBG_NEW_OP
 // ÷ÿ‘ÿnew
 void *operator new(size_t size)
@@ -122,13 +127,64 @@ void operator delete [] (void * p, const char *file, int line)
 #endif
 
 
-// main
-int main(int argc, char** argv)
+class three_d
 {
-    cout << "hello world!" << endl;
+private:
+    int x,y,z;
+public:
+    three_d(int a,int b,int c);
+    ~three_d()
+    {
+        cout << "Destructing\n";
+    }
+    friend ostream & operator <<(ostream &stream,three_d obj);
+};
 
+three_d::three_d(int a,int b,int c)
+{
+    cout << "Constructing\n";
+    x = a;
+    y = b;
+    z = c;
+}
 
-    cout << "test end, bye!" << endl;
+ostream &operator <<(ostream &os,three_d obj)
+{
+    os << obj.x << ",";
+    os << obj.y << ",";
+    os << obj.z << "\n";
+    return os;
+}
+
+int main(int argc,char *argv[])
+{
+    g_debugMemLevel = 1;
+
+    three_d *p = new three_d(1,2,3);
+    three_d *p1 = new three_d(4,5,6);
+    if(!p || !p1)
+    {
+        cout << "Allocation failure" << endl;
+        return 1;
+    }
+    cout << *p << *p1;
+    delete p;
+    delete p1;
+    int *pnum;
+    pnum = new int;
+    *pnum = 0;
+    cout << "num = " << *pnum << endl;
+    delete pnum;
+    cout << "Application Run Successfully!" << endl;
     return 0;
 }
+
+
+
+
+
+
+
+
+
 
