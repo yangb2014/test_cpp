@@ -1,1 +1,1 @@
-# test_c
+# C/C++ test codes

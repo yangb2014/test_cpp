@@ -14,7 +14,7 @@ PS=cpp
 # GNU Make的隐含变量定义
 CC=g++
 CPPFLAGS = -g -Wall
-#CPPFLAGS += -march=i486
+#CPPFLAGS += -march=x86-64
 CPPFLAGS += $(addprefix -I,$(INCLUDES))
 CPPFLAGS += -MMD
 CPPFLAGS += -rdynamic
