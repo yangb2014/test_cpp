@@ -1,0 +1,23 @@
+CC := gcc
+CPP := g++
+CFLAGS := -g -I. -I../ -I/usr/include/ -I$(LIBXML2_HOME)/include/libxml2
+CXXFLAGS := $(CFLAGS)
+RM-F := rm -f
+
+SOURCE := $(wildcard *.c) $(wildcard *.cpp)
+OBJS := $(patsubst %.c,%.o,$(patsubst %.cpp,%.o,$(SOURCE)))
+
+.PHONY : everything objs clean veryclean rebuild
+
+everything : $(OBJS)
+
+objs : $(OBJS)
+
+clean :
+	@$(RM-F) *.o
+
+veryclean :
+	@$(RM-F) *.o  *.wsdl  *.xsd  *.nsmap *.xml soap*
+	@touch *
+
+rebuild: veryclean everything

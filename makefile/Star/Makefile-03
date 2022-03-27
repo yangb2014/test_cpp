@@ -1,0 +1,33 @@
+CC := gcc
+CFLAGS := -g -I. -I./rcservice -I./discountservice -I../../exception -I$(LIBXML2_HOME)/include/libxml2
+CXXFLAGS := $(CFLAGS)
+RM-F := rm -f
+
+SOURCE := $(wildcard *.c) $(wildcard *.cpp)
+OBJS := $(patsubst %.c,%.o,$(patsubst %.cpp,%.o,$(SOURCE)))
+
+SUBDIRS = discountservice  \
+      	  rcservice 
+         
+.PHONY : everything clean veryclean rebuild
+
+everything : $(OBJS)
+	@for dir in $(SUBDIRS); do  \
+		$(MAKE) -C $$dir ; \
+	done
+	
+clean : 
+	@for dir in $(SUBDIRS); do  \
+		$(MAKE) -C $$dir clean ; \
+	done
+	@$(RM-F) *.o
+
+veryclean : 
+	@for dir in $(SUBDIRS); do  \
+		$(MAKE) -C $$dir veryclean ; \
+	done
+	@$(RM-F) *.o
+	@touch *
+	
+rebuild: veryclean everything
+

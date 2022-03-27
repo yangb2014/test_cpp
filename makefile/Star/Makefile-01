@@ -1,0 +1,18 @@
+CC := gcc
+CFLAGS := -g -I. -I../ -I/usr/include/ -I$(LIBXML2_HOME)/include/libxml2
+CXXFLAGS := $(CFLAGS)
+RM-F := rm -f
+
+.PHONY : everything  clean veryclean rebuild
+
+everything :
+	make $(patsubst %.c,%.o,$(patsubst %.cpp,%.o,$(wildcard *.c) $(wildcard *.cpp)))
+
+clean :
+	@$(RM-F) *.o
+
+veryclean :
+	@$(RM-F) *.o
+	@touch *
+
+rebuild: veryclean everything

@@ -1,0 +1,55 @@
+CCOMPILE := gcc
+CPPCOMPILE := g++
+CFLAGS := -g -Wall -I. -I$(LIBXML2_HOME)/include/libxml2
+CXXFLAGS := $(CFLAGS)
+
+LINK := g++
+LINKOPTION := -L/usr/local/lib -L$(LOCAL_LIB_PATH) -L$(LIBXML2_HOME)/lib
+ifeq ($(OS),LINUX)
+	LIBS = m z dl nsl rt pthread xml2
+endif	
+ifeq ($(OS),SOLARIS)
+	LIBS = m z dl nsl rt pthread xml2 socket posix4 Xm Xt X11
+endif
+RM-F := rm -f
+
+
+CURRENTDIR = .
+CC++ = ../../../../pub_c/src/cc++
+COMMON = ../../../../pub_c/src/common
+UTIL = ../../../../pub_c/src/util
+THREADPOOL = ../../../../pub_c/src/threadpool
+
+PUBSOURCE=$(wildcard $(CC++)/*.c) $(wildcard $(CC++)/*.cpp) \
+         $(wildcard $(COMMON)/*.c) $(wildcard $(COMMON)/*.cpp) \
+         $(wildcard $(UTIL)/*.c) $(wildcard $(UTIL)/*.cpp) \
+         $(wildcard $(THREADPOOL)/*.c) $(wildcard $(THREADPOOL)/*.cpp)
+SOURCE = main.cpp  \
+         $(PUBSOURCE)
+OBJS = $(CURRENTDIR)/*.o
+
+OBJSALL = $(patsubst %.c,%.o,$(patsubst %.cpp,%.o,$(SOURCE)))
+BIN = ../../../bin/
+OUTPUT = $(BIN)Process
+
+.PHONY : everything clean veryclean rebuild
+everything : $(OUTPUT)
+
+$(OUTPUT):$(OBJSALL)
+	$(LINK) $(LINKOPTION) -o $(OUTPUT) $(OBJSALL) $(addprefix -l,$(LIBS)) 
+
+clean:
+	@$(RM-F) $(OBJSALL)
+	@$(RM-F) $(OBJS)
+
+veryclean : clean
+	@$(RM-F) $(OUTPUT)
+
+rebuild: veryclean everything
+
+.cpp.o:
+	$(CPPCOMPILE) -c -o $*.o $(CFLAGS) $*.cpp 
+	
+.c.o:
+	$(CCOMPILE) -c -o $*.o $(CFLAGS) $*.c 
+
